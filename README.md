@@ -7,7 +7,7 @@
 Установите этот пакет с помощью composer используя следующую команду:
 
 ```bash
-composer require @todo
+composer require bwt-team/laravel-error-mailer:dev-develop
 ```
 
 После обновления composer, добавьте service provider в массив `providers` в `config/app.php`. 
