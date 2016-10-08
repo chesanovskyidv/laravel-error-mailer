@@ -1,5 +1,8 @@
 ## Laravel 5 Error Mailer
 
+[![Latest Version on Packagist][ico-version]][link-packagist]
+[![Software License][ico-license]](LICENSE.md)
+
 Этот пакет помогает легко включить и настроить отправку email оповещений об ошибках в случае их возникновения.
  
 ### Install
@@ -12,7 +15,7 @@ composer require "bwt-team/laravel-error-mailer":"dev-develop"
 
 После обновления composer добавьте service provider в массив `providers` в `config/app.php`. 
 
-```bash
+```php
 BwtTeam\LaravelErrorMailer\Providers\ErrorMailerServiceProvider::class
 ```
 
@@ -23,11 +26,16 @@ BwtTeam\LaravelErrorMailer\Providers\ErrorMailerServiceProvider::class
 php artisan vendor:publish --provider="BwtTeam\LaravelErrorMailer\Providers\ErrorMailerServiceProvider" --tag=config
 ```
 
-Так же, чтоб данный пакет заработа, необходимо в `bootstrap/app.php` зарегестрировать класс - настройщик. Регистрация должна быть до того как возвращается экземляр Application.
+Также, чтоб данный пакет заработал, необходимо в `bootstrap/app.php` зарегистрировать класс - настройщик. Регистрация должна быть до того как возвращается экземляр Application.
 
-```bash
+```php
 $app->bind(
     \Illuminate\Foundation\Bootstrap\ConfigureLogging::class,
     \BwtTeam\LaravelErrorMailer\ConfigureLogging::class
 );
 ```
+
+[ico-version]: https://img.shields.io/badge/packagist-dev--develop-orange.svg?style=flat-square
+[ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
+
+[link-packagist]: https://packagist.org/packages/bwt-team/laravel-error-mailer#dev-develop
