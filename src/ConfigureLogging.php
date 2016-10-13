@@ -2,12 +2,9 @@
 
 namespace BwtTeam\LaravelErrorMailer;
 
+use BwtTeam\LaravelErrorMailer\Configurators\MailConfigurator;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Log\Writer;
-use Illuminate\Mail\TransportManager;
-use Monolog\Formatter\HtmlFormatter;
-use Monolog\Handler\DeduplicationHandler;
-use Monolog\Handler\SwiftMailerHandler;
 use Monolog\Logger;
 
 class ConfigureLogging extends \Illuminate\Foundation\Bootstrap\ConfigureLogging
@@ -46,7 +43,7 @@ class ConfigureLogging extends \Illuminate\Foundation\Bootstrap\ConfigureLogging
      *
      * @param  \Illuminate\Contracts\Foundation\Application $app
      * @param \Monolog\Logger $monolog
-     * @return void
+     * @return mixed
      */
     protected function configureSingleMailHandler(Application $app, Logger $monolog)
     {
@@ -55,31 +52,10 @@ class ConfigureLogging extends \Illuminate\Foundation\Bootstrap\ConfigureLogging
         $mail = $config->get('error-mailer.mail', []);
         $from = $config->get('mail.from');
         $processors = $config->get('error-mailer.processors', []);
+        $logLevel = $config->get('error-mailer.log_level', Logger::ERROR);
 
-        $transportManager = new TransportManager($app);
-        $mailer = new \Swift_Mailer($transportManager->driver());
-        /** @var \Swift_Message $message */
-        $message = \Swift_Message::newInstance()
-            ->setSubject($mail['subject'])
-            ->setTo($mail['to'])
-            ->setContentType('text/html');
+        $configurator = new MailConfigurator($mail['subject'], $mail['to'], $from, $processors, $logLevel);
 
-        if (is_array($from) && isset($from['address'])) {
-            $message->setFrom($from['address'], $from['name']);
-        }
-
-        $mailHandler = new SwiftMailerHandler($mailer, $message);
-        $mailHandler->setFormatter(new HtmlFormatter());
-        foreach ($processors as $processor) {
-            $processor = new $processor;
-            if (method_exists($processor, 'register')) {
-                $processor->register($app);
-            }
-            $mailHandler->pushProcessor($processor);
-        }
-
-        $handler = new DeduplicationHandler($mailHandler);
-
-        $monolog->pushHandler($handler);
+        return call_user_func($configurator, $monolog);
     }
 }

@@ -3,7 +3,7 @@
 namespace BwtTeam\LaravelErrorMailer\Processors;
 
 use BwtTeam\LaravelErrorMailer\Providers\SqlListenersServiceProvider;
-use Illuminate\Contracts\Foundation\Application;
+use \Illuminate\Contracts\Container\Container;
 
 class SqlProcessor
 {
@@ -65,9 +65,9 @@ class SqlProcessor
     }
 
     /**
-     * @param \Illuminate\Contracts\Foundation\Application $app
+     * @param \Illuminate\Contracts\Container\Container $app
      */
-    public function register(Application $app)
+    public function register(Container $app)
     {
         $app->make('config')->push('app.providers', SqlListenersServiceProvider::class);
     }

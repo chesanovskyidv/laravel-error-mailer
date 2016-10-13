@@ -11,7 +11,10 @@
   ],
   "require": {
     "php": ">=5.5.9",
-    "laravel/framework": "^5.2,<5.4"
+    "monolog/monolog": "~1.11",
+    "illuminate/log": "^5.2,<5.4",
+    "illuminate/support": "^5.2,<5.4",
+    "illuminate/contracts": "^5.2,<5.4"
   },
   "autoload": {
     "psr-4": {
