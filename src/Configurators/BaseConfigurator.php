@@ -8,6 +8,8 @@ abstract class BaseConfigurator
 {
     /** @var callable[] array */
     protected $configurators = [];
+    /** @var array */
+    protected $processors = [];
 
     /**
      * @param Logger $logger
@@ -22,6 +24,39 @@ abstract class BaseConfigurator
 
         return $logger;
     }
+
+    /**
+     * @return array
+     */
+    public function getProcessors()
+    {
+        return $this->processors;
+    }
+
+    /**
+     * @param callable|callable[] $processors
+     * @return $this
+     */
+    public function addProcessors($processors)
+    {
+        $processors = is_array($processors) ? $processors : func_get_args();
+
+        foreach ($processors as $processor) {
+            $processor = is_string($processor) ? new $processor : $processor;
+
+            if (!is_callable($processor)) {
+                throw new \InvalidArgumentException('Processors must be valid callables (callback or object with an __invoke method), ' . var_export($processor, true) . ' given');
+            }
+            if (method_exists($processor, 'register')) {
+                $processor->register($this->getApp());
+            }
+
+            $this->processors[] = $processor;
+        }
+
+        return $this;
+    }
+
 
     /**
      * @param Logger $logger

@@ -4,8 +4,9 @@
 
 # Laravel 5 Error Mailer
 
-[![Latest Version on Packagist][ico-version]][link-packagist]
-[![Software License][ico-license]](LICENSE.md)
+[![Latest Stable Version][ico-stable-version]][link-stable-packagist]
+[![Latest Unstable Version][ico-unstable-version]][link-unstable-packagist]
+[![License][ico-license]](LICENSE.md)
 
 Этот пакет помогает легко включить и настроить отправку email оповещений об ошибках в случае их возникновения.
  
@@ -55,15 +56,15 @@ $app->bind(
 Для настройки компонента laravel:
 
    - Установите компонент используя следующую команду:
-    ```bash
+    ```
     composer require illuminate/mail
     ```
-   - Скопируйте [файл конфигураций](https://github.com/laravel/laravel/blob/master/config/mail.php) в папку `config` находящуюсь в корновом каталоге (создайте папку сами, если она отсутствует).
-   - В файле `bootstrap/app` подключить сервис провайдер.
-    ```bash
+   - Скопируйте [файл конфигураций](https://github.com/laravel/laravel/blob/master/config/mail.php) в папку `config` находящуюсь в корневом каталоге (создайте папку сами, если она отсутствует).
+   - В файле `bootstrap/app` подключите сервис провайдер.
+    ```
     $app->register(\Illuminate\Mail\MailServiceProvider::class);
     ```
-   - Загрузить настройки из файла настроек.
+   - Загрузите настройки из файла настроек.
     ```
     $app->configure('mail');
     ```
@@ -74,21 +75,35 @@ $app->bind(
  public function __construct($subject, $to, $from, array $processors = [], $logLevel = Logger::ERROR, \Swift_Transport $sendmailTransport = null)
 ```
 
-Этот класс имеет геттер и сеттер для каждого параметра, так что вам не обязательно передавать все параметры сразу при создании экземпляра класса.
 Данный класс отвечает за отправку сообщений об ошибках по почте, но его включение отключит запись логов в файл, которая по умолчанию делается в lumen.
 Чтоб не отключать запись вам необходимо создать экземпляр класса `\BwtTeam\LaravelErrorMailer\Configurators\FileConfigurator`. Конструктор этого класса выглядит следующим образом:
 
 ```
  public function __construct($file = null, $logLevel = Logger::DEBUG)
 ```
- 
-После этого необходимо передать этот экземпляр в метод `with`, класса `\BwtTeam\LaravelErrorMailer\Configurators\MailConfigurator`.
-После настройки нашего компонента необходимо передать его в метод `configureMonologUsing` класса Application до того как этот класс будет возвращен.<br />
+
+После этого необходимо передать этот экземпляр в метод `with` класса `\BwtTeam\LaravelErrorMailer\Configurators\MailConfigurator`.
+Каждый класс для конфигурации имеет возможность работы с монологовскими процессорами. Для этого необходимо передать экземпляр процессора или имя класса в конструктор или добавить, используя метод `addProcessors`.
+Помимо стандартных процессоров монолога, из коробки доступны следующие процессоры:
+    
+```php
+ \BwtTeam\LaravelErrorMailer\Processors\SqlProcessor::class,
+ \BwtTeam\LaravelErrorMailer\Processors\PostDataProcessor::class,
+ \BwtTeam\LaravelErrorMailer\Processors\HeadersProcessor::class,
+```
+
+После настройки компонента необходимо передать его в метод `configureMonologUsing` класса Application, до того как этот класс будет возвращен.<br />
 Итоговая настройка будет выглядеть примерно следующим образом:
 
 ```
 $configurator = new \BwtTeam\LaravelErrorMailer\Configurators\MailConfigurator('subject', 'to@example.com', 'from@example.com');
 $configurator->setSendmailTransport(\Swift_MailTransport::newInstance());
+$configurator->addProcessors([
+     \BwtTeam\LaravelErrorMailer\Processors\SqlProcessor::class,
+     \BwtTeam\LaravelErrorMailer\Processors\PostDataProcessor::class,
+     \BwtTeam\LaravelErrorMailer\Processors\HeadersProcessor::class,
+     \Monolog\Processor\WebProcessor::class
+]);
 $configurator->with(new \BwtTeam\LaravelErrorMailer\Configurators\FileConfigurator());
 $app->configureMonologUsing($configurator);
 ```
@@ -99,9 +114,11 @@ $app->configureMonologUsing($configurator);
 
 ### Лицензия
 
-This package is licensed under the [MIT license](LICENSE.md).
+Этот пакет использует лицензию [MIT](LICENSE.md).
 
-[ico-version]: https://img.shields.io/badge/packagist-dev--develop-orange.svg?style=flat-square
-[ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
+[ico-stable-version]: https://poser.pugx.org/bwt-team/laravel-error-mailer/v/stable?format=flat-square
+[ico-unstable-version]: https://poser.pugx.org/bwt-team/laravel-error-mailer/v/unstable?format=flat-square
+[ico-license]: https://poser.pugx.org/bwt-team/laravel-error-mailer/license?format=flat-square
 
-[link-packagist]: https://packagist.org/packages/bwt-team/laravel-error-mailer#dev-develop
+[link-stable-packagist]: https://packagist.org/packages/bwt-team/laravel-error-mailer
+[link-unstable-packagist]: https://packagist.org/packages/bwt-team/laravel-error-mailer#dev-develop

@@ -18,6 +18,8 @@ class SqlListenersServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        $this->app->make('db');
+
         $connection = $this->app->make('db.connection');
         foreach (self::$listeners as $listener) {
             $connection->listen($listener);

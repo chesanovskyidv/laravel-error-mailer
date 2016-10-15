@@ -95,11 +95,26 @@ class FileConfigurator extends BaseConfigurator
      */
     public function configure(\Monolog\Logger $logger)
     {
-        $handler = (new StreamHandler($this->getFile(), $this->getLogLevel()))
-            ->setFormatter(new LineFormatter(null, null, true, true));
-
-        $logger->pushHandler($handler);
+        $fileHandler = $this->createFileHandler($this->getFile(), $this->getProcessors(), $this->getLogLevel());
+        $logger->pushHandler($fileHandler);
 
         return $logger;
+    }
+
+    /**
+     * @param $file
+     * @param array $processors
+     * @param int $logLevel
+     * @return StreamHandler
+     */
+    protected function createFileHandler($file, $processors = [], $logLevel = Logger::ERROR)
+    {
+        $fileHandler = (new StreamHandler($file, $logLevel))
+            ->setFormatter(new LineFormatter(null, null, true, true));
+        foreach ($processors as $processor) {
+            $fileHandler->pushProcessor($processor);
+        }
+
+        return $fileHandler;
     }
 }

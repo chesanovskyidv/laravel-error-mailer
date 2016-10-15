@@ -69,6 +69,6 @@ class SqlProcessor
      */
     public function register(Container $app)
     {
-        $app->make('config')->push('app.providers', SqlListenersServiceProvider::class);
+        $app->register(SqlListenersServiceProvider::class);
     }
 }

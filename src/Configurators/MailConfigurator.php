@@ -18,8 +18,6 @@ class MailConfigurator extends BaseConfigurator
     protected $to;
     /** @var string */
     protected $from;
-    /** @var array */
-    protected $processors;
     /** @var int */
     protected $logLevel;
     /** @var \Swift_Transport */
@@ -31,7 +29,7 @@ class MailConfigurator extends BaseConfigurator
      * @param string $subject
      * @param string $to
      * @param string $from
-     * @param array $processors
+     * @param callable[] $processors
      * @param int $logLevel
      * @param \Swift_Transport $sendmailTransport
      */
@@ -41,7 +39,7 @@ class MailConfigurator extends BaseConfigurator
         $this->setSubject($subject);
         $this->setTo($to);
         $this->setFrom($from);
-        $this->setProcessors($processors);
+        $this->addProcessors($processors);
         $this->setLogLevel($logLevel);
         if (!is_null($sendmailTransport)) {
             $this->setSendmailTransport($sendmailTransport);
@@ -120,25 +118,6 @@ class MailConfigurator extends BaseConfigurator
     public function setFrom($from)
     {
         $this->from = $from;
-
-        return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function getProcessors()
-    {
-        return $this->processors;
-    }
-
-    /**
-     * @param array $processors
-     * @return $this
-     */
-    public function setProcessors($processors)
-    {
-        $this->processors = $processors;
 
         return $this;
     }
@@ -234,7 +213,7 @@ class MailConfigurator extends BaseConfigurator
     /**
      * @param \Swift_Mailer $mailer
      * @param $message
-     * @param array $processors
+     * @param callable[] $processors
      * @param int $logLevel
      * @return SwiftMailerHandler
      */
@@ -243,10 +222,6 @@ class MailConfigurator extends BaseConfigurator
         $mailHandler = new SwiftMailerHandler($mailer, $message, $logLevel);
         $mailHandler->setFormatter(new HtmlFormatter());
         foreach ($processors as $processor) {
-            $processor = new $processor;
-            if (method_exists($processor, 'register')) {
-                $processor->register($this->getApp());
-            }
             $mailHandler->pushProcessor($processor);
         }
 
