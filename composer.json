@@ -1,6 +1,7 @@
 {
   "name": "bwt-team/laravel-error-mailer",
   "description": "Package to send email notification when something goes wrong",
+  "keywords": ["laravel", "error", "mail"],
   "license": "MIT",
   "authors": [
     {
@@ -10,7 +11,9 @@
   ],
   "require": {
     "php": ">=5.5.9",
-    "monolog/monolog": "~1.11"
+    "monolog/monolog": "~1.11",
+    "illuminate/support": "^5.2",
+    "illuminate/contracts": "^5.2"
   },
   "autoload": {
     "psr-4": {
