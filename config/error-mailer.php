@@ -3,34 +3,31 @@
 return [
     /*
     |--------------------------------------------------------------------------
-    | Включение\отключение E-Mail оповещения об ошибках
+    | Enable\disable error E-Mail alerts
     |--------------------------------------------------------------------------
     |
-    | Опция позволяющая включать и отключать рассылку E-Mail сообщений
-    | об ошибках, возникающих в ходе работы приложения.
+    | An option allowing to enable and disable sending email alerts in case an error occurs.
     |
     */
     'enabled' => env('ERROR_MAIL_ENABLE', false),
 
     /*
     |--------------------------------------------------------------------------
-    | Минимальный уровень сообщений
+    | Minimal message severity to notify
     |--------------------------------------------------------------------------
     |
-    | Минимальный уровень сообщений, о которых следует извещать
+    | Minimal severity that should be notified about.
     |
     */
-
     'log_level' => env('ERROR_MAIL_LOG_LEVEL', 'error'),
 
     /*
     |--------------------------------------------------------------------------
-    | Настройка получателей E-Mail сообщений и темы письма
+    | Setting up E-Mail recipients and subject
     |--------------------------------------------------------------------------
     |
-    | Эта опция позволяет указать тему, которая будет указана в письме,
-    | отправленном в случае возникновения ошибки, и получателей этого письма.
-    | Получателей следует указывать согласно стандарту RFC 2822
+    | Allows to set up email subject for alert and recipients.
+    | Recipients should be set up according to RFC 2822 standard
     |
     */
     'mail' => [
@@ -40,14 +37,13 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Список процессоров
+    | The list of processors
     |--------------------------------------------------------------------------
     |
-    | Список процессоров которые регистрируются в обработчике ошибок.
-    | Поддерживаются все процессоры монолога. Чтоб написать свой процессор
-    | необходимо реализовать интерфейс Callable. Изначально в этом массиве
-    | есть закомментированные процессоры, которые также могут быть полезны,
-    | вы можете раскомментировать их в случае необходимости.
+    | The list of processors that register in error handler. All processors of
+    | monologue are supported. Callable interface should be implemented in order
+    | to create your own processor. Initially, there are processors that are
+    | commented out that can be useful, you can un-comment them if necessary.
     |
     */
     'processors' => [

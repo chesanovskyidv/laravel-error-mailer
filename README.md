@@ -1,5 +1,5 @@
 <p align="right">
-Описание на русском | <a href="README_EN.md">English description</a> 
+English description | <a href="README_RU.md">Russian description</a> 
 </p>
 
 # Laravel 5 Error Mailer
@@ -8,40 +8,40 @@
 [![Latest Unstable Version][ico-unstable-version]][link-unstable-packagist]
 [![License][ico-license]](LICENSE.md)
 
-Этот пакет помогает легко включить и настроить отправку email оповещений об ошибках в случае их возникновения.
+This package allows to enable and set up email alerts in case errors appear. 
  
-### Содержание
+### Contents
 
-- [Установка](#Установка)
-- [Настройка в Laravel](#Настройка-в-laravel)
-- [Настройка в Lumen](#Настройка-в-lumen)
-- [Авторы](#Авторы)
-- [Лицензия](#Лицензия)
+- [Setup](#setup)
+- [Setup in Laravel](#setup-in-laravel)
+- [Setup in Lumen](#setup-in-lumen)
+- [License](#license)
 
-### Установка
+### Setup
 
-Установите этот пакет с помощью composer используя следующую команду:
+Setup this package with composer using the following command:
 
 ```bash
 composer require "bwt-team/laravel-error-mailer":"dev-develop"
 ```
 
-### Настройка в Laravel
+### Setup in Laravel
 
-После обновления composer добавьте service provider в массив `providers` в `config/app.php`. 
+After composer update add service provider into `providers` in `config/app.php`. 
 
 ```php
 BwtTeam\LaravelErrorMailer\Providers\ErrorMailerServiceProvider::class
 ```
 
-Этот service provider предоставит возможность опубликовать конфигурационный файл, чтоб изменить настройки пакета исходя из ваших потребностей.
-После публикации настроек этот service provider можно отключить, для работы пакета он не нужен. Для публикации используйте команду:
+This service provider will enable with an option to publish config file to update
+package settings depending on your needs. 
+After publication this service provider can be disabled, it is not needed for package work. For publication please use:
 
 ```bash
 php artisan vendor:publish --provider="BwtTeam\LaravelErrorMailer\Providers\ErrorMailerServiceProvider" --tag=config
 ```
 
-Также, чтоб данный пакет заработал, необходимо в `bootstrap/app.php` зарегистрировать класс - настройщик. Регистрация должна быть до того как возвращается экземляр Application.
+Also, to make package work please register the setup class in `bootstrap/app.php`. Registration should happen before Application sample is returned.
 
 ```php
 $app->bind(
@@ -50,50 +50,50 @@ $app->bind(
 );
 ```
 
-### Настройка в Lumen
+### Setup in Lumen
 
-Для отправки сообщений по почте вы можете воспользоваться компонентом laravel, либо создать класс для отправки сами, проинициализировав класс, реализуюзий интерфейс \Swift_Transport.
-Для настройки компонента laravel:
+To send email messages you can use laravel component or create a class for sending yourself by initializing class, which implements \Swift_Transport interface.
+To set up laravel component:
 
-   - Установите компонент используя следующую команду:
+   - setup component using the following command:
     ```
     composer require illuminate/mail
     ```
-   - Скопируйте [файл конфигураций](https://github.com/laravel/laravel/blob/master/config/mail.php) в папку `config` находящуюсь в корневом каталоге (создайте папку сами, если она отсутствует).
-   - В файле `bootstrap/app` подключите сервис провайдер.
+   - copy [config file](https://github.com/laravel/laravel/blob/master/config/mail.php) into  `config` directory, which is stored in root catalogue (or create the directory yourself). 
+   - enable service provider in `bootstrap/app`.
     ```
     $app->register(\Illuminate\Mail\MailServiceProvider::class);
     ```
-   - Загрузите настройки из файла настроек.
+   - setup settings from configuration file.
     ```
     $app->configure('mail');
     ```
 
-Для включения отправки сообщений об ошибках в файле `bootstrap/app` необходимо создать экземпляр класса `\BwtTeam\LaravelErrorMailer\Configurators\MailConfigurator`, конструктор которого выглядит следующим образом:
+To enable sending email alerts you need to create a class instance `\BwtTeam\LaravelErrorMailer\Configurators\MailConfigurator` in   `bootstrap/app`, its constructor looks like following: 
 
 ```
  public function __construct($subject, $to, $from, array $processors = [], $logLevel = Logger::ERROR, \Swift_Transport $sendmailTransport = null)
 ```
 
-Данный класс отвечает за отправку сообщений об ошибках по почте, но его включение отключит запись логов в файл, которая по умолчанию делается в lumen.
-Чтоб не отключать запись вам необходимо создать экземпляр класса `\BwtTeam\LaravelErrorMailer\Configurators\FileConfigurator`. Конструктор этого класса выглядит следующим образом:
+This class is responsible for sending alert emails by mail but enabling it will disable writing logs into file, which is enabled in lumen by default. In order not to disable
+writing you need to create a class instance `\BwtTeam\LaravelErrorMailer\Configurators\FileConfigurator`. Class constructor looks like the following: 
 
 ```
  public function __construct($file = null, $logLevel = Logger::DEBUG)
 ```
 
-После этого необходимо передать этот экземпляр в метод `with` класса `\BwtTeam\LaravelErrorMailer\Configurators\MailConfigurator`.
-Каждый класс для конфигурации имеет возможность работы с монологовскими процессорами. Для этого необходимо передать экземпляр процессора или имя класса в конструктор или добавить, используя метод `addProcessors`.
-Помимо стандартных процессоров монолога, из коробки доступны следующие процессоры:
-    
+After that you need to pass this instance into `with` method in `\BwtTeam\LaravelErrorMailer\Configurators\MailConfigurator`class.
+Each configuration class has options to work with monologue processors. For this you need to pass process instance to class name into constructor or add with the help of  `addProcessors` method.
+In addition to standard monologue processors, the following out-of-box processors are available:
+ 
 ```php
  \BwtTeam\LaravelErrorMailer\Processors\SqlProcessor::class,
  \BwtTeam\LaravelErrorMailer\Processors\PostDataProcessor::class,
  \BwtTeam\LaravelErrorMailer\Processors\HeadersProcessor::class,
 ```
 
-После настройки компонента необходимо передать его в метод `configureMonologUsing` класса Application, до того как этот класс будет возвращен.<br />
-Итоговая настройка будет выглядеть примерно следующим образом:
+When component is set up you need to pass it to `configureMonologUsing` method  in  Application class before it is returned.<br />
+Final setup will look like this:
 
 ```
 $configurator = new \BwtTeam\LaravelErrorMailer\Configurators\MailConfigurator('subject', 'to@example.com', 'from@example.com');
@@ -108,13 +108,9 @@ $configurator->with(new \BwtTeam\LaravelErrorMailer\Configurators\FileConfigurat
 $app->configureMonologUsing($configurator);
 ```
 
-### Авторы
+### License
 
-Этот пакет создан командой [BWT](http://www.groupbwt.com/) и [Chesanovskiy Denis](mailto:chesanovskiy_dv@gmail.com) в частности.
-
-### Лицензия
-
-Этот пакет использует лицензию [MIT](LICENSE.md).
+This package is using [MIT](LICENSE.md).
 
 [ico-stable-version]: https://poser.pugx.org/bwt-team/laravel-error-mailer/v/stable?format=flat-square
 [ico-unstable-version]: https://poser.pugx.org/bwt-team/laravel-error-mailer/v/unstable?format=flat-square

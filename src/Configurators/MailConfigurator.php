@@ -98,7 +98,7 @@ class MailConfigurator extends BaseConfigurator
      */
     public function setTo($to)
     {
-        $this->to = $to;
+        $this->to = explode(',',$to);
 
         return $this;
     }
