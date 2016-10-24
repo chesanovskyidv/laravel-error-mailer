@@ -22,7 +22,7 @@
 Установите этот пакет с помощью composer используя следующую команду:
 
 ```bash
-composer require "bwt-team/laravel-error-mailer":"dev-develop"
+composer require bwt-team/laravel-error-mailer
 ```
 
 ### Настройка в Laravel
