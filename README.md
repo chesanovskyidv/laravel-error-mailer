@@ -22,7 +22,7 @@ This package allows to enable and set up email alerts in case errors appear.
 Setup this package with composer using the following command:
 
 ```bash
-composer require "bwt-team/laravel-error-mailer":"~1.0.0"
+composer require "bwt-team/laravel-error-mailer":"~v1.0.0"
 ```
 
 ### Setup in Laravel
