@@ -1,5 +1,5 @@
 <p align="right">
-<a href="README.md">English description</a> | Описание на русском 
+<a href="README.md">Описание на английском</a> | Описание на русском 
 </p>
 
 # Laravel 5 Error Mailer
