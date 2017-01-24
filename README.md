@@ -60,6 +60,7 @@ To set up laravel component:
     composer require illuminate/mail
     ```
    - copy [config file](https://github.com/laravel/laravel/blob/master/config/mail.php) into  `config` directory, which is stored in root catalogue (or create the directory yourself). 
+   - Copy config file  `vendor/bwt-team/laravel-error-mailer/config/error-mailer.php` into config directory, which is stored in root directory (or create it yourself if it is missing) and set it up according to your needs. 
    - enable service provider in `bootstrap/app`.
     ```
     $app->register(\Illuminate\Mail\MailServiceProvider::class);
@@ -67,6 +68,7 @@ To set up laravel component:
    - setup settings from configuration file.
     ```
     $app->configure('mail');
+    $app->configure('error-mailer');
     ```
 
 To enable sending email alerts you need to create a class instance `\BwtTeam\LaravelErrorMailer\Configurators\MailConfigurator` in   `bootstrap/app`, its constructor looks like following: 

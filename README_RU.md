@@ -59,6 +59,7 @@ $app->bind(
     composer require illuminate/mail
     ```
    - Скопируйте [файл конфигураций](https://github.com/laravel/laravel/blob/master/config/mail.php) в папку `config` находящуюсь в корневом каталоге (создайте папку сами, если она отсутствует).
+   - Скопируйте файл конфигураций `vendor/bwt-team/laravel-error-mailer/config/error-mailer.php` в папку `config` находящуюсь в корневом каталоге (создайте папку сами, если она отсутствует) и настройте его в соответствии с вашими нуждами.
    - В файле `bootstrap/app` подключите сервис провайдер.
     ```
     $app->register(\Illuminate\Mail\MailServiceProvider::class);
@@ -66,6 +67,7 @@ $app->bind(
    - Загрузите настройки из файла настроек.
     ```
     $app->configure('mail');
+    $app->configure('error-mailer');
     ```
 
 Для включения отправки сообщений об ошибках в файле `bootstrap/app` необходимо создать экземпляр класса `\BwtTeam\LaravelErrorMailer\Configurators\MailConfigurator`, конструктор которого выглядит следующим образом:
